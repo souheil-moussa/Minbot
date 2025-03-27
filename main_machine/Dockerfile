@@ -2,10 +2,11 @@ FROM httpd:latest
 
 #Install Dependinces
 RUN apt-get update && apt-get install -y ffmpeg inotify-tools
-
 #Copy website code
 COPY ./my-httpd.conf /usr/local/apache2/conf/httpd.conf
+
 COPY ./website/index.html /usr/local/apache2/htdocs/
+COPY ./website/page2.html /usr/local/apache2/htdocs/
 COPY ./website/script.js /usr/local/apache2/htdocs/
 COPY ./website/auto_convert.sh /usr/local/apache2/
 COPY ./website/favicon.ico /usr/local/apache2/htdocs/

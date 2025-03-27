@@ -1,6 +1,10 @@
 function connect() {
-	const ws = new WebSocket('ws://192.168.1.15:8081');
+	const serverIP = localStorage.getItem('server_IPAddress')
+	const savedIPAddress = localStorage.getItem('cont_IPAddress');
+	const statusDiv = document.querySelector('.status');
+	const ws = new WebSocket("ws://" + savedIPAddress + ":8081");
 	var stream_status = false
+	console.log()
 
 	ws.onerror = (event) => {
 		document.getElementById('wss').innerHTML = "Ws server: Disconnected "
@@ -10,7 +14,11 @@ function connect() {
 
 	ws.onopen = () => {
 		document.getElementById('wss').innerHTML = "Ws server: Connected "
+		statusDiv.classList.add('status-connected');
 		console.log('Connected to WebSocket server');
+		ws.send(JSON.stringify({ serverIP: serverIP }));
+
+
 
 	};
 
@@ -20,6 +28,7 @@ function connect() {
 	ws.onclose = () => {
 		document.getElementById('wss').innerHTML = "Ws server: Disconnected "
 		setTimeout(connect, 5000)
+		statusDiv.classList.remove('status-connected')
 
 	}
 
