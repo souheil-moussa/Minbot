@@ -1,23 +1,137 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <title>HLS Stream Control</title>
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IP Address Input</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .container {
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        input[type="text"]:focus {
+            border-color: #007bff;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+        }
+
+        .help-text {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #0069d9;
+        }
+
+        .error {
+            color: #dc3545;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .success {
+            color: #28a745;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+    </style>
 </head>
 
 <body>
+    <div class="container">
+        <h1>IP Address Validator</h1>
+        <p>Enter an IP address to verify its format.</p>
 
-    <video width="320" height="240" autoplay>
-        <source src="hls/audio.m3u8">
-        Your browser does not support the video tag.
-    </video>
-    <button id="start">Start Stream</button>
-    <label id="wss">Ws server: Disconnected </label>
-    <script src="script.js">
+        <div class="form-group">
+            <label for="ipAddress_pi">Controller IP Address:</label>
+            <input type="text" id="ipAddress_pi" name="ipAddress" placeholder="e.g. 192.168.1.1"
+                title="Please enter a valid IPv4 address">
+            <label for="ipAddress_server">server IP Address:</label>
+            <input type="text" id="ipAddress_server" name="ipAddress" placeholder="e.g. 192.168.1.1"
+                title="Please enter a valid IPv4 address">
+            <div class="help-text">Format: xxx.xxx.xxx.xxx (where xxx is a number between 0-255)</div>
+            <div class="error" id="errorMessage">Please enter a valid IP address</div>
+            <div class="success" id="successMessage">Valid IP address format!</div>
+        </div>
+
+        <button type="button" id="validateButton">Validate IP</button>
+    </div>
+
+    <script>
+        document.getElementById('validateButton').addEventListener('click', function (event) {
+            event.preventDefault();
+
+            const ipInput = document.getElementById('ipAddress_pi');
+            const ipInput_server = document.getElementById('ipAddress_server');
+            const errorMessage = document.getElementById('errorMessage');
+            const successMessage = document.getElementById('successMessage');
+
+            const ipRegex = /^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+
+            if (ipRegex.test(ipInput.value) && ipRegex.test(ipInput_server.value)) {
+                errorMessage.style.display = 'none';
+                successMessage.style.display = 'block';
+                const ipValue1 = ipInput_server.value
+                const ipValue = ipInput.value;
+                localStorage.setItem('cont_IPAddress', ipValue);
+                localStorage.setItem('server_IPAddress', ipValue1);
 
 
-
+                setTimeout(() => {
+                    window.location.href = 'page2.html';
+                }, 500); // Redirect after 1.5 seconds for user feedback
+            } else {
+                errorMessage.style.display = 'block';
+                successMessage.style.display = 'none';
+            }
+        });
     </script>
 </body>
 
