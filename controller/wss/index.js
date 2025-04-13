@@ -12,7 +12,7 @@ wss.on("connection", ws => {
 				console.error("server IP was not recived");
 			}
 			else {
-				exec('./stream_start.sh', [ip], error => {
+				exec(`./stream_start.sh ${ip} `, error => {
 					if (error) {
 						console.log(`${error}`);
 					}
