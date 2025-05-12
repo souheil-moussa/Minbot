@@ -1,0 +1,221 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teaching Slide Display</title>
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --success-color: #4cc9f0;
+            --danger-color: #f72585;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark-color);
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .slide-container {
+            width: 100%;
+            background-color: var(--light-color);
+            padding: 2rem;
+            min-height: 320px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .slide-content {
+            font-size: 1.8rem;
+            padding: 2.5rem;
+            border-radius: 6px;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            width: 100%;
+            min-height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .controls {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        @media (min-width: 768px) {
+            .controls {
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+            }
+        }
+
+        .btn {
+            cursor: pointer;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .text-input {
+            flex-grow: 1;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 1rem;
+            background-color: var(--light-color);
+            font-size: 0.8rem;
+            color: #666;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Teaching Slide</h1>
+            <div class="subtitle">Auto-refreshing content every 15 seconds</div>
+        </header>
+
+        <div class="slide-container">
+            <div id="slideContent" class="slide-content">
+                Welcome to your teaching slide! Enter your content below.
+            </div>
+        </div>
+
+        <div class="status">
+            <span class="status-indicator"></span>
+            <label id="timer">Next refresh: 15s</label>
+        </div>
+
+        <footer>
+            &copy; 2025 Teaching Slide System
+        </footer>
+    </div>
+    <script>
+        // Text variable to display (this could be set from anywhere in your application)
+        let slideText = "This is your teaching slide content. It will refresh every 15 seconds.";
+        
+        let secondsLeft = 15;
+        let timerInterval;
+        
+        // DOM elements
+        const slideContent = document.getElementById('slideContent');
+        const timerLabel = document.getElementById('timer');
+        const statusIndicator = document.querySelector('.status-indicator');
+        
+        // Function to update the slide content
+        function updateSlide() {
+            // Display the current text variable
+            slideContent.textContent = slideText;
+            
+            // Visual feedback for refresh
+            statusIndicator.style.backgroundColor = 'var(--success-color)';
+            setTimeout(() => {
+                statusIndicator.style.backgroundColor = '';
+            }, 1000);
+            
+            // Reset timer
+            secondsLeft = 15;
+            updateTimerDisplay();
+        }
+        
+        // Function to update timer display
+        function updateTimerDisplay() {
+            timerLabel.textContent = `Next refresh: ${secondsLeft}s`;
+        }
+        
+        // Start the timer
+        function startTimer() {
+            // Clear any existing interval
+            if (timerInterval) clearInterval(timerInterval);
+            
+            // Set initial text
+            slideContent.textContent = slideText;
+            
+            // Update the timer every second
+            timerInterval = setInterval(() => {
+                secondsLeft--;
+                updateTimerDisplay();
+                
+                if (secondsLeft <= 0) {
+                    updateSlide();
+                }
+            }, 1000);
+        }
+        
+        // No reset button anymore
+        
+        // Initialize
+        updateTimerDisplay();
+        startTimer();
+    </script>
+</body>
+
+</html>
