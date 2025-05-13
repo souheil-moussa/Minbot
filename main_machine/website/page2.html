@@ -58,22 +58,30 @@
             opacity: 0.8;
         }
 
-        .video-container {
+        /* Replaced video container with slide container styles */
+        .slide-container {
             width: 100%;
-            background-color: #000;
-            position: relative;
-            padding-top: 56.25%;
-            /* 16:9 Aspect Ratio */
-            overflow: hidden;
+            background-color: var(--light-color);
+            padding: 2rem;
+            min-height: 320px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
         }
 
-        video {
-            position: absolute;
-            top: 0;
-            left: 0;
+        .slide-content {
+            font-size: 1.8rem;
+            padding: 2.5rem;
+            border-radius: 6px;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
             width: 100%;
-            height: 100%;
-            object-fit: contain;
+            min-height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .controls {
@@ -147,13 +155,20 @@
             <div class="subtitle">View and control your live stream</div>
         </header>
 
-        <div class="video-container">
-            <video autoplay>
-                <source src="hls/audio.m3u8">
-                Your browser does not support the video tag.
-            </video>
+        <!-- Replaced video container with slide container -->
+        <div class="slide-container">
+            <div id="slideContent" class="slide-content">
+                Welcome to your teaching slide! Content refreshes every 15 seconds.
+            </div>
         </div>
 
+        <!-- Added timer status from teaching slide -->
+        <div class="status">
+            <span class="status-indicator"></span>
+            <label id="timer">Next refresh: 15s</label>
+        </div>
+
+        <!-- Kept original controls -->
         <div class="controls">
             <button id="start" class="btn">Start Stream</button>
             <div class="status">
@@ -166,9 +181,65 @@
             &copy; 2025 HLS Stream Control
         </footer>
     </div>
+    
     <script>
         const serverHost = window.location.hostname;
         console.log("Server Hostname:", serverHost);
+        
+        // Added teaching slide auto-refresh functionality
+        let slideText = "This is your teaching slide content. It will refresh every 15 seconds.";
+        
+        let secondsLeft = 15;
+        let timerInterval;
+        
+        // DOM elements
+        const slideContent = document.getElementById('slideContent');
+        const timerLabel = document.getElementById('timer');
+        const statusIndicator = document.querySelector('.status-indicator');
+        
+        // Function to update the slide content
+        function updateSlide() {
+            // Display the current text variable
+            slideContent.textContent = slideText;
+            
+            // Visual feedback for refresh
+            statusIndicator.style.backgroundColor = 'var(--success-color)';
+            setTimeout(() => {
+                statusIndicator.style.backgroundColor = '';
+            }, 1000);
+            
+            // Reset timer
+            secondsLeft = 15;
+            updateTimerDisplay();
+        }
+        
+        // Function to update timer display
+        function updateTimerDisplay() {
+            timerLabel.textContent = `Next refresh: ${secondsLeft}s`;
+        }
+        
+        // Start the timer
+        function startTimer() {
+            // Clear any existing interval
+            if (timerInterval) clearInterval(timerInterval);
+            
+            // Set initial text
+            slideContent.textContent = slideText;
+            
+            // Update the timer every second
+            timerInterval = setInterval(() => {
+                secondsLeft--;
+                updateTimerDisplay();
+                
+                if (secondsLeft <= 0) {
+                    updateSlide();
+                }
+            }, 1000);
+        }
+        
+        // Initialize
+        updateTimerDisplay();
+        startTimer();
     </script>
     <script src="script.js"></script>
 </body>
