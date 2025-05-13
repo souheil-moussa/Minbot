@@ -1,0 +1,16 @@
+whisperx
+torch
+torchaudio
+watchdog
+pydub
+pyannote.audio
+scipy
+python-dotenv
+langchain>=0.1.13
+langchain-core>=0.1.30
+langchain-openai>=0.1.3
+langgraph>=0.0.28
+streamlit>=1.31.1
+chromadb>=0.4.24
+openai>=1.14.1
+python-dotenv>=1.0.1
