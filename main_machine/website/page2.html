@@ -63,25 +63,29 @@
             width: 100%;
             background-color: var(--light-color);
             padding: 2rem;
-            min-height: 320px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
+            max-height: 400px;
+            overflow-y: auto;
+            text-align: left;
+            white-space: pre-wrap;
         }
 
         .slide-content {
-            font-size: 1.8rem;
-            padding: 2.5rem;
+            font-size: 1rem;
+            padding: 1.5rem;
             border-radius: 6px;
             background-color: white;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
             width: 100%;
+            max-width: 700px;
+            /* Limit line length */
             min-height: 300px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display: block;
+            overflow-y: auto;
+            margin: 0 auto;
+            /* Center the content horizontally */
+            text-align: left;
+            white-space: pre-wrap;
+            word-wrap: break-word;
         }
 
         .controls {
@@ -197,10 +201,25 @@
         const timerLabel = document.getElementById('timer');
         const statusIndicator = document.querySelector('.status-indicator');
 
+        async function fetchSlideText() {
+            try {
+                const response = await fetch('/livemeetingminutes.txt'); // Adjust path if needed
+                if (!response.ok) throw new Error("Failed to fetch slide text");
+                slideText = await response.text();
+            } catch (error) {
+                console.error("Error fetching slide text:", error);
+                slideText = "Error loading slide content.";
+            }
+        }
+
+
+
         // Function to update the slide content
-        function updateSlide() {
+        async function updateSlide() {
             // Display the current text variable
+            await fetchSlideText();
             slideContent.textContent = slideText;
+            slideContent.innerHTML = slideText.replace(/\n/g, '<br>');
 
             // Visual feedback for refresh
             statusIndicator.style.backgroundColor = 'var(--success-color)';
@@ -209,7 +228,7 @@
             }, 1000);
 
             // Reset timer
-            secondsLeft = 15;
+            secondsLeft = 1;
             updateTimerDisplay();
         }
 
@@ -238,8 +257,10 @@
         }
 
         // Initialize
-        updateTimerDisplay();
-        startTimer();
+        fetchSlideText().then(() => {
+            updateTimerDisplay();
+            startTimer();
+        });
     </script>
     <script src="script.js"></script>
 </body>
