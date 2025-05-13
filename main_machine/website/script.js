@@ -37,12 +37,12 @@ function connect() {
 		if (stream_status) {
 			ws.send('stop');
 			stream_status = false;
-			document.getElementById("start").innerHTML = "Start Stream"
+			document.getElementById("start").innerHTML = "Start Meeting"
 		}
 		else {
 			ws.send('start');
 			stream_status = true;
-			document.getElementById("start").innerHTML = "Stop Stream"
+			document.getElementById("start").innerHTML = "Stop Meeting"
 		}
 	});
 }

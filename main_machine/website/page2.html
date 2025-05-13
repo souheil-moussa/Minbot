@@ -151,7 +151,7 @@
 <body>
     <div class="container">
         <header>
-            <h1>HLS Stream Control</h1>
+            <h1>Generated minutes</h1>
             <div class="subtitle">View and control your live stream</div>
         </header>
 
@@ -170,7 +170,7 @@
 
         <!-- Kept original controls -->
         <div class="controls">
-            <button id="start" class="btn">Start Stream</button>
+            <button id="start" class="btn">Start meeting</button>
             <div class="status">
                 <span class="status-indicator"></span>
                 <label id="wss">Ws server: Disconnected</label>
@@ -181,62 +181,62 @@
             &copy; 2025 HLS Stream Control
         </footer>
     </div>
-    
+
     <script>
         const serverHost = window.location.hostname;
         console.log("Server Hostname:", serverHost);
-        
+
         // Added teaching slide auto-refresh functionality
         let slideText = "This is your teaching slide content. It will refresh every 15 seconds.";
-        
+
         let secondsLeft = 15;
         let timerInterval;
-        
+
         // DOM elements
         const slideContent = document.getElementById('slideContent');
         const timerLabel = document.getElementById('timer');
         const statusIndicator = document.querySelector('.status-indicator');
-        
+
         // Function to update the slide content
         function updateSlide() {
             // Display the current text variable
             slideContent.textContent = slideText;
-            
+
             // Visual feedback for refresh
             statusIndicator.style.backgroundColor = 'var(--success-color)';
             setTimeout(() => {
                 statusIndicator.style.backgroundColor = '';
             }, 1000);
-            
+
             // Reset timer
             secondsLeft = 15;
             updateTimerDisplay();
         }
-        
+
         // Function to update timer display
         function updateTimerDisplay() {
             timerLabel.textContent = `Next refresh: ${secondsLeft}s`;
         }
-        
+
         // Start the timer
         function startTimer() {
             // Clear any existing interval
             if (timerInterval) clearInterval(timerInterval);
-            
+
             // Set initial text
             slideContent.textContent = slideText;
-            
+
             // Update the timer every second
             timerInterval = setInterval(() => {
                 secondsLeft--;
                 updateTimerDisplay();
-                
+
                 if (secondsLeft <= 0) {
                     updateSlide();
                 }
             }, 1000);
         }
-        
+
         // Initialize
         updateTimerDisplay();
         startTimer();
